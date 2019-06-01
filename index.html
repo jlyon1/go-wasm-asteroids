@@ -24,9 +24,13 @@ license that can be found in the LICENSE file.
     <script src="wasm_exec.js"></script>
     <script>
         const go = new Go();
-        WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
-            go.run(result.instance);
-        });
+        const response = await fetch("lib.wasm");
+        const buffer = await response.arrayBuffer();
+        const obj = await WebAssembly.instantiate(buffer);
+        obj.instance.exports.exported_func();
+        // WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
+        //     go.run(result.instance);
+        // });
     </script>
 </body>
 
