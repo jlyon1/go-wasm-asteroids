@@ -1,26 +1,21 @@
 package main
 
 import (
-	// it was either reference pi as 3.14 or import it from here 😅
-	// https://golang.org/pkg/syscall/js
 	"syscall/js"
 	"./objects"
 	"./game"
 )
 
 var (
-	// js.Value can be any JS object/type/constructor
 	window, doc, body, canvas, laserCtx, beep js.Value
 	windowSize                                struct{ w, h float64 }
 	
 	gameobj game.Game
-	// gs is at the highest scope, all others can access it
 	gs = gameState{laserSize: 35, directionX: 3.7, directionY: -3.7, laserX: 40, laserY: 40}
 )
 
 func main() {
-	// https://stackoverflow.com/a/47262117
-	// creates empty channel
+
 	runGameForever := make(chan bool)
 
 	setup()
@@ -51,10 +46,6 @@ func main() {
 	window.Call("addEventListener", "keydown", keyEventHandler)
 	window.Call("addEventListener", "keyup", keyEventUpHandler)
 
-	// attempt to receive from empty channel
-	// since noone ever sends anything on it, it's essentially a blocking forever operation
-	// we basically have a daeomon/service/background program
-	// in WASM world, our game will keep running 😉
 	<-runGameForever
 }
 
