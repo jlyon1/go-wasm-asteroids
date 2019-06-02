@@ -14,11 +14,12 @@ type Player struct {
 	angle	float64
 	speedx float64
 	speedy float64
+	spawnChan chan Object
 	
 }
 
 // NewPlayer returns a new player object
-func NewPlayer(context js.Value, x int, y int) *Player {
+func NewPlayer(context js.Value, x int, y int, spawnChan chan Object) *Player {
 	p := &Player{
 		Context: context,
 		X:       x,
@@ -43,6 +44,7 @@ func calcRotatedPoint(angle float64, x int, y int, originx int, originy int)  pv
 // Draw renders the player on the screen
 func (p *Player) Draw() {
 	angleRad := p.angle * (math.Pi/180)
+	// _= angleRad
 	p.Context.Call("beginPath")
 	pt := calcRotatedPoint(angleRad, p.X + 10, p.Y + 10, p.X, p.Y)
 	p.Context.Call("moveTo", pt.x, pt.y)
@@ -52,11 +54,13 @@ func (p *Player) Draw() {
 	p.Context.Call("lineTo", pt3.x,pt3.y)
 	p.Context.Call("lineTo", pt.x, pt.y)
 	p.Context.Call("fill")
+
 	p.Context.Call("closePath")
 }
 
 // Step Handles misc player update functions
 func (p *Player) Step(keys control.KeysPressed){
+	
 	accel := 1.0
 	angleRad := p.angle * (math.Pi/180)
 	maxSpeed := 10.0
@@ -88,6 +92,16 @@ func (p *Player) Step(keys control.KeysPressed){
 		}else if(p.speedy < -maxSpeed){
 			p.speedy = -maxSpeed
 		}
+	}
+	if(keys.Space){
+		b := Bullet{
+			Context: p.Context,
+			X: p.X,
+			Y: p.Y,
+			Angle: p.angle,
+		}
+		p.spawnChan <- &b
+
 	}
 	
 	p.X += int(p.speedx)

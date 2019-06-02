@@ -5,4 +5,5 @@ type KeysPressed struct{
 	Left bool
 	Right bool
 	Up bool
+	Space bool
 }

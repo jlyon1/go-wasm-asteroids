@@ -2,7 +2,6 @@ package main
 
 import (
 	"syscall/js"
-	"./objects"
 	"./game"
 )
 
@@ -67,16 +66,15 @@ func setup() {
 	canvas.Set("height", 800)
 	canvas.Set("width", 800)
 	body.Call("appendChild", canvas)
-
+	log("hi")
 	laserCtx = canvas.Call("getContext", "2d")
 	laserCtx.Set("fillStyle", "white")
-	player := objects.NewPlayer(laserCtx, 40,40)
 	gameobj = game.Game{
-		Player: player,
 		Context: laserCtx,
 		Width: windowSize.w,
 		Height: windowSize.h,
 	}
+	gameobj.Init()
 
 }
 
