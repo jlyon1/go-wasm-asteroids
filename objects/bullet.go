@@ -21,7 +21,7 @@ func NewBullet(context js.Value, x int, y int, angle float64) *Bullet {
 		Context: context,
 		X:       x,
 		Y:       y,
-		Angle: 10,
+		Angle: 10.0,
 
 	}
 	return p
@@ -39,6 +39,6 @@ func (b *Bullet) Draw() {
 // Step Handles misc player update functions
 func (b *Bullet) Step(){
 	angleRad := b.Angle * (math.Pi/180)
-	b.X += int(5.0*math.Sin(angleRad))
-	b.Y += int(5.0*math.Cos(angleRad))
+	b.X += int(15.0*math.Sin(angleRad))
+	b.Y += int(15.0*math.Cos(angleRad))
 }

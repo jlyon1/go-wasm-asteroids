@@ -27,6 +27,7 @@ func NewPlayer(context js.Value, x int, y int, spawnChan chan Object) *Player {
 		angle: 0,
 		speedx: 0,
 		speedy: 0,
+		spawnChan: spawnChan,
 	}
 	return p
 }
@@ -60,9 +61,9 @@ func (p *Player) Draw() {
 
 // Step Handles misc player update functions
 func (p *Player) Step(keys control.KeysPressed){
-	
+
 	accel := 1.0
-	angleRad := p.angle * (math.Pi/180)
+	angleRad := p.angle * (math.Pi/180.0)
 	maxSpeed := 10.0
 	if(p.X > 800){
 		p.X =0
@@ -94,13 +95,14 @@ func (p *Player) Step(keys control.KeysPressed){
 		}
 	}
 	if(keys.Space){
-		b := Bullet{
+		b := &Bullet{
 			Context: p.Context,
 			X: p.X,
 			Y: p.Y,
-			Angle: p.angle,
+			Angle: 180.0-p.angle,
 		}
-		p.spawnChan <- &b
+
+		p.spawnChan <- b
 
 	}
 	

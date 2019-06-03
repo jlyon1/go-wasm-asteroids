@@ -3,7 +3,6 @@ package game
 import "../objects"
 import "syscall/js"
 import "../control"
-import "fmt"
 
 // Game represents the game
 type Game struct {
@@ -64,19 +63,25 @@ func (g *Game) HandleKeysUp(keycode string){
 	}
 }
 
-func (g *Game) processRecv(){
-	for{
-		fmt.Println("here")
-		<- g.spawnChan
-		// g.Objects = append(g.Objects, )
+func (g *Game) processRecv(spawnChan chan objects.Object){
+	for obj := range g.spawnChan{
+		g.Objects = append(g.Objects, obj)
 	}
 }
 
 // Init inits the game
 func (g *Game) Init(){
-	g.spawnChan = make(chan objects.Object)
+	g.spawnChan = make(chan objects.Object, 100)
+	go g.processRecv(g.spawnChan)
 	player := objects.NewPlayer(g.Context, 40,40, g.spawnChan)
-
-	go g.processRecv()
+	asteroid := &objects.Asteroid{
+		Context: g.Context,
+		X: 100,
+		Y: 100,
+		Angle: 55.0,
+		Size: 22,
+		Speed: 2,
+	}
+	g.spawnChan <- asteroid
 	g.Player = player
 }

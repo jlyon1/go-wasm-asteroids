@@ -3,6 +3,7 @@ package main
 import (
 	"syscall/js"
 	"./game"
+	"sync"
 )
 
 var (
@@ -12,10 +13,9 @@ var (
 	gameobj game.Game
 	gs = gameState{laserSize: 35, directionX: 3.7, directionY: -3.7, laserX: 40, laserY: 40}
 )
-
+var wg sync.WaitGroup
 func main() {
 
-	runGameForever := make(chan bool)
 
 	setup()
 
@@ -44,8 +44,9 @@ func main() {
 	})
 	window.Call("addEventListener", "keydown", keyEventHandler)
 	window.Call("addEventListener", "keyup", keyEventUpHandler)
+	wg.Add(1)
+	wg.Wait()
 
-	<-runGameForever
 }
 
 func updateGame() {
