@@ -94,18 +94,18 @@ func (p *Player) Step(keys control.KeysPressed){
 			p.speedy = -maxSpeed
 		}
 	}
+	
+	p.X += int(p.speedx)
+	p.Y += int(p.speedy)
 	if(keys.Space){
 		b := &Bullet{
 			Context: p.Context,
-			X: p.X,
-			Y: p.Y,
+			X: int(p.X),
+			Y: int(p.Y),
 			Angle: 180.0-p.angle,
 		}
 
 		p.spawnChan <- b
 
 	}
-	
-	p.X += int(p.speedx)
-	p.Y += int(p.speedy)
 }

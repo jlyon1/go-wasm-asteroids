@@ -4,4 +4,5 @@ package objects
 type Object interface{
 	Draw()
 	Step()
+	GetBoundingBox() (*BoundingBox)
 }

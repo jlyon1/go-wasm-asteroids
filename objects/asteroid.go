@@ -48,3 +48,13 @@ func (b *Asteroid) Step(){
 	b.X += int(b.Speed*math.Sin(angleRad))
 	b.Y += int(b.Speed*math.Cos(angleRad))
 }
+
+// GetBoundingBox returns the bounding box for a bullet
+func (b *Asteroid) GetBoundingBox()(*BoundingBox){
+	return &BoundingBox{
+		X: b.X - int(b.Size),
+		Y: b.Y - int(b.Size),
+		Width: 2*int(b.Size),
+		Height: 2*int(b.Size),
+	}
+}

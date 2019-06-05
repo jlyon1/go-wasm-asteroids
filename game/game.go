@@ -78,7 +78,7 @@ func (g *Game) Init(){
 		Context: g.Context,
 		X: 100,
 		Y: 100,
-		Angle: 55.0,
+		Angle: 25.0,
 		Size: 22,
 		Speed: 2,
 	}
